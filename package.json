@@ -1,0 +1,37 @@
+{
+  "name": "ace-js",
+  "version": "0.1.0",
+  "description": "MCP server for codebase indexing and semantic search (TypeScript implementation)",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist"
+  },
+  "bin": {
+    "ace-js": "./dist/index.js"
+  },
+  "keywords": [
+    "mcp",
+    "code-indexing",
+    "semantic-search",
+    "ai",
+    "augment-context-engine"
+  ],
+  "author": "",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4",
+    "axios": "^1.7.9"
+  },
+  "devDependencies": {
+    "@types/node": "^20.17.10",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
