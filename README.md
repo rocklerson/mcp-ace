@@ -1,4 +1,4 @@
-# ACE-JS
+# MCP-ACE
 
 基于 TypeScript 实现的 MCP (Model Context Protocol) 服务器，用于代码库索引和语义搜索。
 
@@ -18,12 +18,18 @@
 - Node.js >= 18.0.0
 - npm 或 yarn 或 pnpm
 
+### 从 npm 安装
+
+```bash
+npm install -g @rocklerson/mcp-ace
+```
+
 ### 从源码安装
 
 ```bash
 # 克隆仓库
-git clone <repository-url>
-cd ace-js
+git clone https://github.com/rocklerson/mcp-ace.git
+cd mcp-ace
 
 # 安装依赖
 npm install
@@ -40,8 +46,8 @@ npm link
 ### 配置方式（按优先级排序）
 
 1. **命令行参数** - 最高优先级
-2. **环境变量** - 前缀 `ACEMCP_`
-3. **配置文件** - `~/.ace-js/settings.json`
+2. **环境变量** - 前缀 `MCP_ACE_`
+3. **配置文件** - `~/.mcp-ace/settings.json`
 4. **默认值**
 
 ### 必需配置
@@ -58,9 +64,9 @@ npm link
 
 ### 配置文件示例
 
-创建 `~/.ace-js/settings.json`:
+创建 `~/.mcp-ace/settings.json`:
 
-\`\`\`json
+```json
 {
   "baseUrl": "https://api.augmentcode.com",
   "token": "your-api-token-here",
@@ -69,16 +75,16 @@ npm link
   "textExtensions": [".py", ".js", ".ts", ".md"],
   "excludePatterns": ["node_modules", ".git", "dist"]
 }
-\`\`\`
+```
 
 ### 环境变量
 
-\`\`\`bash
-export ACE_BASE_URL="https://api.augmentcode.com"
-export ACE_TOKEN="your-api-token-here"
-export ACE_BATCH_SIZE="10"
-export ACE_MAX_LINES_PER_BLOB="800"
-\`\`\`
+```bash
+export MCP_ACE_BASE_URL="https://api.augmentcode.com"
+export MCP_ACE_TOKEN="your-api-token-here"
+export MCP_ACE_BATCH_SIZE="10"
+export MCP_ACE_MAX_LINES_PER_BLOB="800"
+```
 
 ## 使用方法
 
@@ -86,10 +92,10 @@ export ACE_MAX_LINES_PER_BLOB="800"
 
 ```bash
 # 使用命令行参数
-ace-js --base-url https://api.augmentcode.com --token YOUR_TOKEN
+mcp-ace --base-url https://api.augmentcode.com --token YOUR_TOKEN
 
 # 使用环境变量
-ACE_BASE_URL=https://api.augmentcode.com ACE_TOKEN=YOUR_TOKEN ace-js
+MCP_ACE_BASE_URL=https://api.augmentcode.com MCP_ACE_TOKEN=YOUR_TOKEN mcp-ace
 
 # 开发模式
 npm run dev -- --base-url https://api.augmentcode.com --token YOUR_TOKEN
@@ -103,20 +109,19 @@ npm run dev -- --base-url https://api.augmentcode.com --token YOUR_TOKEN
 
 **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
-\`\`\`json
+```json
 {
   "mcpServers": {
-    "ace-js": {
-      "command": "node",
-      "args": ["/path/to/ace-js/dist/index.js"],
+    "mcp-ace": {
+      "command": "mcp-ace",
       "env": {
-        "ACE_BASE_URL": "https://api.augmentcode.com",
-        "ACE_TOKEN": "your-api-token-here"
+        "MCP_ACE_BASE_URL": "https://api.augmentcode.com",
+        "MCP_ACE_TOKEN": "your-api-token-here"
       }
     }
   }
 }
-\`\`\`
+```
 
 ### 工具使用
 
@@ -147,7 +152,7 @@ npm run dev -- --base-url https://api.augmentcode.com --token YOUR_TOKEN
 3. **变更检测** - 与历史索引比对，识别新增/修改的文件
 4. **文件分割** - 大文件自动分割为多个片段（默认 800 行/片段）
 5. **批量上传** - 仅上传变更的 blob（默认 10 个/批次）
-6. **元数据保存** - 更新 `~/.acemcp-js/data/projects.json`
+6. **元数据保存** - 更新 `~/.mcp-ace/data/projects.json`
 
 ### 语义搜索流程
 
@@ -175,7 +180,7 @@ npm run clean
 ## 项目结构
 
 ```
-ace-js/
+mcp-ace/
 ├── src/
 │   ├── index.ts              # MCP 服务器入口
 │   ├── config.ts             # 配置管理
@@ -197,8 +202,8 @@ ace-js/
 
 A: 请通过以下任一方式配置：
 - 命令行参数: `--base-url https://api.example.com`
-- 环境变量: `ACE_BASE_URL=https://api.example.com`
-- 配置文件: 在 `~/.ace-js/settings.json` 中设置
+- 环境变量: `MCP_ACE_BASE_URL=https://api.example.com`
+- 配置文件: 在 `~/.mcp-ace/settings.json` 中设置
 
 **Q: 搜索结果为空**
 
@@ -238,3 +243,8 @@ Apache-2.0
 ## 贡献
 
 欢迎提交 Issue 和 Pull Request！
+
+## 相关链接
+
+- GitHub: https://github.com/rocklerson/mcp-ace
+- npm: https://www.npmjs.com/package/@rocklerson/mcp-ace

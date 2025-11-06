@@ -36,10 +36,10 @@ function parseArgs(): Partial<Config> {
       config.maxLinesPerBlob = parseInt(args[++i], 10);
     } else if (arg === '--help' || arg === '-h') {
       console.log(`
-ACE-JS - MCP 服务器，用于代码库索引和语义搜索
+MCP-ACE - MCP 服务器，用于代码库索引和语义搜索
 
 用法:
-  ace-js [选项]
+  mcp-ace [选项]
 
 选项:
   --base-url <url>       ACE API 基础 URL (必需)
@@ -49,14 +49,14 @@ ACE-JS - MCP 服务器，用于代码库索引和语义搜索
   --help, -h             显示此帮助信息
 
 环境变量:
-  ACE_BASE_URL           与 --base-url 相同
-  ACE_TOKEN              与 --token 相同
-  ACE_BATCH_SIZE         与 --batch-size 相同
-  ACE_MAX_LINES_PER_BLOB 与 --max-lines 相同
+  MCP_ACE_BASE_URL           与 --base-url 相同
+  MCP_ACE_TOKEN              与 --token 相同
+  MCP_ACE_BATCH_SIZE         与 --batch-size 相同
+  MCP_ACE_MAX_LINES_PER_BLOB 与 --max-lines 相同
 
 配置优先级: 命令行参数 > 环境变量 > 配置文件 > 默认值
 
-配置文件位置: ~/.ace-js/settings.json
+配置文件位置: ~/.mcp-ace/settings.json
       `);
       process.exit(0);
     }
@@ -69,7 +69,7 @@ ACE-JS - MCP 服务器，用于代码库索引和语义搜索
  * 主函数
  */
 async function main() {
-  console.error('ACE-JS MCP 服务器启动中...');
+  console.error('MCP-ACE MCP 服务器启动中...');
 
   try {
     // 解析命令行参数
@@ -83,7 +83,7 @@ async function main() {
     // 创建 MCP 服务器
     const server = new Server(
       {
-        name: 'ace-js',
+        name: 'mcp-ace',
         version: '0.1.0',
       },
       {
@@ -113,7 +113,7 @@ async function main() {
       console.error(`收到工具调用: ${name}`);
 
       if (name === 'search_context') {
-        const result = await searchContextTool(args as SearchContextArgs, config);
+        const result = await searchContextTool(args as unknown as SearchContextArgs, config);
 
         return {
           content: [

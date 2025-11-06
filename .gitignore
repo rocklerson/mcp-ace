@@ -31,7 +31,7 @@ yarn-error.log*
 .env.*.local
 
 # User data
-.ace-js/
+.mcp-ace/
 
 # Claude Code files
 .augment/

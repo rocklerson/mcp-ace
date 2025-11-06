@@ -1,6 +1,6 @@
 {
-  "name": "ace-js",
-  "version": "0.1.0",
+  "name": "@rocklerson/mcp-ace",
+  "version": "0.1.1",
   "description": "MCP server for codebase indexing and semantic search (TypeScript implementation)",
   "main": "dist/index.js",
   "type": "module",
@@ -8,11 +8,17 @@
     "build": "tsc",
     "dev": "tsx src/index.ts",
     "start": "node dist/index.js",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "bin": {
-    "ace-js": "./dist/index.js"
+    "mcp-ace": "dist/index.js"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "keywords": [
     "mcp",
     "code-indexing",
@@ -20,8 +26,16 @@
     "ai",
     "augment-context-engine"
   ],
-  "author": "",
+  "author": "rocklerson",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rocklerson/mcp-ace.git"
+  },
+  "homepage": "https://github.com/rocklerson/mcp-ace#readme",
+  "bugs": {
+    "url": "https://github.com/rocklerson/mcp-ace/issues"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.4",
     "axios": "^1.7.9"

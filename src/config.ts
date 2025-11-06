@@ -51,7 +51,7 @@ const DEFAULT_CONFIG = {
  */
 export function getConfigDir(): string {
   const homeDir = os.homedir();
-  return path.join(homeDir, '.ace-js');
+  return path.join(homeDir, '.mcp-ace');
 }
 
 /**
@@ -109,20 +109,20 @@ function loadConfigFromFile(): Partial<Config> {
 function loadConfigFromEnv(): Partial<Config> {
   const config: Partial<Config> = {};
 
-  if (process.env.ACE_BASE_URL) {
-    config.baseUrl = process.env.ACE_BASE_URL;
+  if (process.env.MCP_ACE_BASE_URL) {
+    config.baseUrl = process.env.MCP_ACE_BASE_URL;
   }
 
-  if (process.env.ACE_TOKEN) {
-    config.token = process.env.ACE_TOKEN;
+  if (process.env.MCP_ACE_TOKEN) {
+    config.token = process.env.MCP_ACE_TOKEN;
   }
 
-  if (process.env.ACE_BATCH_SIZE) {
-    config.batchSize = parseInt(process.env.ACE_BATCH_SIZE, 10);
+  if (process.env.MCP_ACE_BATCH_SIZE) {
+    config.batchSize = parseInt(process.env.MCP_ACE_BATCH_SIZE, 10);
   }
 
-  if (process.env.ACE_MAX_LINES_PER_BLOB) {
-    config.maxLinesPerBlob = parseInt(process.env.ACE_MAX_LINES_PER_BLOB, 10);
+  if (process.env.MCP_ACE_MAX_LINES_PER_BLOB) {
+    config.maxLinesPerBlob = parseInt(process.env.MCP_ACE_MAX_LINES_PER_BLOB, 10);
   }
 
   return config;
@@ -133,11 +133,11 @@ function loadConfigFromEnv(): Partial<Config> {
  */
 function validateConfig(config: Config): void {
   if (!config.baseUrl) {
-    throw new Error('配置错误: baseUrl 是必需的。请通过环境变量 ACE_BASE_URL 或命令行参数 --base-url 设置。');
+    throw new Error('配置错误: baseUrl 是必需的。请通过环境变量 MCP_ACE_BASE_URL 或命令行参数 --base-url 设置。');
   }
 
   if (!config.token) {
-    throw new Error('配置错误: token 是必需的。请通过环境变量 ACE_TOKEN 或命令行参数 --token 设置。');
+    throw new Error('配置错误: token 是必需的。请通过环境变量 MCP_ACE_TOKEN 或命令行参数 --token 设置。');
   }
 
   if (config.batchSize <= 0) {
