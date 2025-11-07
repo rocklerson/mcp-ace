@@ -31,7 +31,7 @@ export async function searchContextTool(
       return 'Error: query 参数是必需的';
     }
 
-    console.log(`执行搜索上下文工具: project=${args.project_root_path}, query=${args.query}`);
+    // console.log(`执行搜索上下文工具: project=${args.project_root_path}, query=${args.query}`);
 
     // 创建索引管理器实例
     const manager = new IndexManager(config);
@@ -41,7 +41,7 @@ export async function searchContextTool(
 
     return result;
   } catch (error) {
-    console.error('搜索上下文工具执行失败:', error);
+    // console.error('搜索上下文工具执行失败:', error);
     return `Error: ${error instanceof Error ? error.message : String(error)}`;
   }
 }

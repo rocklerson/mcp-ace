@@ -98,7 +98,7 @@ function loadConfigFromFile(): Partial<Config> {
 
     return parsed;
   } catch (error) {
-    console.error(`加载配置文件失败: ${error}`);
+    // console.error(`加载配置文件失败: ${error}`);
     return {};
   }
 }
@@ -173,7 +173,7 @@ export function loadConfig(cliOptions: Partial<Config> = {}): Config {
   // 验证配置
   validateConfig(config);
 
-  console.log(`配置已加载: baseUrl=${config.baseUrl}, batchSize=${config.batchSize}, maxLinesPerBlob=${config.maxLinesPerBlob}`);
+  // console.log(`配置已加载: baseUrl=${config.baseUrl}, batchSize=${config.batchSize}, maxLinesPerBlob=${config.maxLinesPerBlob}`);
 
   return config;
 }
@@ -193,5 +193,5 @@ export function saveConfig(config: Partial<Config>): void {
   }
 
   fs.writeFileSync(configPath, JSON.stringify(serializable, null, 2), 'utf-8');
-  console.log(`配置已保存到: ${configPath}`);
+  // console.log(`配置已保存到: ${configPath}`);
 }

@@ -116,7 +116,7 @@ export class IndexManager {
       blobs.push({ path: chunkPath, content: chunkContent });
     }
 
-    console.log(`文件 ${filePath} (${totalLines} 行) 分割为 ${numChunks} 个片段`);
+    // console.log(`文件 ${filePath} (${totalLines} 行) 分割为 ${numChunks} 个片段`);
     return blobs;
   }
 
@@ -157,7 +157,7 @@ export class IndexManager {
             const fileBlobs = this.splitFileContent(relativePath, content);
             blobs.push(...fileBlobs);
           } catch (error) {
-            console.warn(`读取文件失败: ${fullPath}`, error);
+            // console.warn(`读取文件失败: ${fullPath}`, error);
           }
         }
       }
@@ -169,7 +169,7 @@ export class IndexManager {
 
     walkDir(projectPath);
 
-    console.log(`收集了 ${blobs.length} 个 blobs（排除 ${excludedCount} 个文件/目录）`);
+    // console.log(`收集了 ${blobs.length} 个 blobs（排除 ${excludedCount} 个文件/目录）`);
     return blobs;
   }
 
@@ -242,13 +242,13 @@ export class IndexManager {
 
         if (attempt < maxRetries - 1) {
           const waitTime = retryDelay * Math.pow(2, attempt);
-          console.warn(`请求失败 (尝试 ${attempt + 1}/${maxRetries}): ${lastError.message}. 将在 ${waitTime}ms 后重试...`);
+          // console.warn(`请求失败 (尝试 ${attempt + 1}/${maxRetries}): ${lastError.message}. 将在 ${waitTime}ms 后重试...`);
           await new Promise((resolve) => setTimeout(resolve, waitTime));
         }
       }
     }
 
-    console.error(`请求在 ${maxRetries} 次尝试后失败`);
+    // console.error(`请求在 ${maxRetries} 次尝试后失败`);
     throw lastError;
   }
 
@@ -257,7 +257,7 @@ export class IndexManager {
    */
   async indexProject(projectPath: string): Promise<IndexResult> {
     const normalizedPath = this.normalizePath(projectPath);
-    console.log(`开始索引项目: ${normalizedPath}`);
+    // console.log(`开始索引项目: ${normalizedPath}`);
 
     try {
       // 步骤 1: 收集所有文件
@@ -293,7 +293,7 @@ export class IndexManager {
 
       const blobsToUpload = Array.from(newHashes).map((h) => blobHashMap.get(h)!);
 
-      console.log(`增量索引: total=${blobs.length}, existing=${unchangedHashes.size}, new=${newHashes.size}`);
+      // console.log(`增量索引: total=${blobs.length}, existing=${unchangedHashes.size}, new=${newHashes.size}`);
 
       // 步骤 5: 批量上传新 blob
       const uploadedHashes: string[] = [];
@@ -301,14 +301,14 @@ export class IndexManager {
 
       if (blobsToUpload.length > 0) {
         const totalBatches = Math.ceil(blobsToUpload.length / this.config.batchSize);
-        console.log(`上传 ${blobsToUpload.length} 个新 blobs，分 ${totalBatches} 批（批次大小=${this.config.batchSize}）`);
+        // console.log(`上传 ${blobsToUpload.length} 个新 blobs，分 ${totalBatches} 批（批次大小=${this.config.batchSize}）`);
 
         for (let batchIdx = 0; batchIdx < totalBatches; batchIdx++) {
           const start = batchIdx * this.config.batchSize;
           const end = Math.min(start + this.config.batchSize, blobsToUpload.length);
           const batchBlobs = blobsToUpload.slice(start, end);
 
-          console.log(`上传批次 ${batchIdx + 1}/${totalBatches} (${batchBlobs.length} blobs)`);
+          // console.log(`上传批次 ${batchIdx + 1}/${totalBatches} (${batchBlobs.length} blobs)`);
 
           try {
             const uploadBatch = async () => {
@@ -335,18 +335,18 @@ export class IndexManager {
 
             if (result.blob_names && result.blob_names.length > 0) {
               uploadedHashes.push(...result.blob_names);
-              console.log(`批次 ${batchIdx + 1} 上传成功，获得 ${result.blob_names.length} 个 blob 名称`);
+              // console.log(`批次 ${batchIdx + 1} 上传成功，获得 ${result.blob_names.length} 个 blob 名称`);
             } else {
-              console.warn(`批次 ${batchIdx + 1} 未返回 blob 名称`);
+              // console.warn(`批次 ${batchIdx + 1} 未返回 blob 名称`);
               failedBatches.push(batchIdx + 1);
             }
           } catch (error) {
-            console.error(`批次 ${batchIdx + 1} 失败:`, error);
+            // console.error(`批次 ${batchIdx + 1} 失败:`, error);
             failedBatches.push(batchIdx + 1);
           }
         }
       } else {
-        console.log('无需上传，所有 blobs 已存在于索引中');
+        // console.log('无需上传，所有 blobs 已存在于索引中');
       }
 
       // 步骤 6: 合并并保存索引
@@ -360,7 +360,7 @@ export class IndexManager {
           ? `项目已索引，共 ${allHashes.length} 个 blobs (已存在: ${unchangedHashes.size}, 新增: ${uploadedHashes.length})`
           : `项目已索引，共 ${allHashes.length} 个 blobs (全部已存在，无需上传)`;
 
-      console.log(message);
+      // console.log(message);
 
       return {
         status,
@@ -375,7 +375,7 @@ export class IndexManager {
         },
       };
     } catch (error) {
-      console.error(`索引项目失败:`, error);
+      // console.error(`索引项目失败:`, error);
       return {
         status: 'error',
         message: error instanceof Error ? error.message : String(error),
@@ -388,11 +388,11 @@ export class IndexManager {
    */
   async searchContext(projectPath: string, query: string): Promise<string> {
     const normalizedPath = this.normalizePath(projectPath);
-    console.log(`搜索项目 ${normalizedPath}，查询: ${query}`);
+    // console.log(`搜索项目 ${normalizedPath}，查询: ${query}`);
 
     try {
       // 步骤 1: 自动执行增量索引
-      console.log(`搜索前自动索引项目...`);
+      // console.log(`搜索前自动索引项目...`);
       const indexResult = await this.indexProject(projectPath);
 
       if (indexResult.status === 'error') {
@@ -400,7 +400,7 @@ export class IndexManager {
       }
 
       if (indexResult.stats) {
-        console.log(`自动索引完成: total=${indexResult.stats.totalBlobs}, existing=${indexResult.stats.existingBlobs}, new=${indexResult.stats.newBlobs}`);
+        // console.log(`自动索引完成: total=${indexResult.stats.totalBlobs}, existing=${indexResult.stats.existingBlobs}, new=${indexResult.stats.newBlobs}`);
       }
 
       // 步骤 2: 加载已索引的 blob 名称
@@ -412,7 +412,7 @@ export class IndexManager {
       }
 
       // 步骤 3: 执行搜索
-      console.log(`执行搜索，共 ${blobNames.length} 个 blobs...`);
+      // console.log(`执行搜索，共 ${blobNames.length} 个 blobs...`);
 
       const searchRequest = async () => {
         const payload: SearchRequest = {
@@ -448,14 +448,14 @@ export class IndexManager {
       const formattedRetrieval = result.formatted_retrieval || '';
 
       if (!formattedRetrieval) {
-        console.warn('搜索返回空结果');
+        // console.warn('搜索返回空结果');
         return '未找到与您的查询相关的代码上下文';
       }
 
-      console.log(`搜索完成`);
+      // console.log(`搜索完成`);
       return formattedRetrieval;
     } catch (error) {
-      console.error(`搜索失败:`, error);
+      // console.error(`搜索失败:`, error);
       return `Error: ${error instanceof Error ? error.message : String(error)}`;
     }
   }

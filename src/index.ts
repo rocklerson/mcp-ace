@@ -69,7 +69,7 @@ MCP-ACE - MCP 服务器，用于代码库索引和语义搜索
  * 主函数
  */
 async function main() {
-  console.error('MCP-ACE MCP 服务器启动中...');
+  // console.error('MCP-ACE MCP 服务器启动中...');
 
   try {
     // 解析命令行参数
@@ -78,7 +78,7 @@ async function main() {
     // 加载配置
     const config = loadConfig(cliOptions);
 
-    console.error(`配置已加载: baseUrl=${config.baseUrl}`);
+    // console.error(`配置已加载: baseUrl=${config.baseUrl}`);
 
     // 创建 MCP 服务器
     const server = new Server(
@@ -110,7 +110,7 @@ async function main() {
     server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
 
-      console.error(`收到工具调用: ${name}`);
+      // console.error(`收到工具调用: ${name}`);
 
       if (name === 'search_context') {
         const result = await searchContextTool(args as unknown as SearchContextArgs, config);
@@ -122,6 +122,7 @@ async function main() {
               text: result,
             },
           ],
+          isError: false,
         };
       }
 
@@ -134,17 +135,17 @@ async function main() {
     // 连接服务器和传输层
     await server.connect(transport);
 
-    console.error('MCP 服务器已启动，等待请求...');
+    // console.error('MCP 服务器已启动，等待请求...');
 
     // 保持进程运行
     process.on('SIGINT', async () => {
-      console.error('收到 SIGINT 信号，关闭服务器...');
+      // console.error('收到 SIGINT 信号，关闭服务器...');
       await server.close();
       process.exit(0);
     });
 
     process.on('SIGTERM', async () => {
-      console.error('收到 SIGTERM 信号，关闭服务器...');
+      // console.error('收到 SIGTERM 信号，关闭服务器...');
       await server.close();
       process.exit(0);
     });
