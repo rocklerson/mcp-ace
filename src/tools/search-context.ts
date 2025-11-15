@@ -10,7 +10,7 @@ import type { Config } from '../types.js';
  * 搜索上下文工具的参数接口
  */
 export interface SearchContextArgs {
-  project_root_path: string;
+  project_root_path?: string;
   query: string;
 }
 
@@ -23,21 +23,29 @@ export async function searchContextTool(
 ): Promise<string> {
   try {
     // 验证必需参数
-    if (!args.project_root_path) {
-      return 'Error: project_root_path 参数是必需的';
-    }
-
     if (!args.query) {
       return 'Error: query 参数是必需的';
     }
 
-    // console.log(`执行搜索上下文工具: project=${args.project_root_path}, query=${args.query}`);
+    // 解析项目路径（优先级：显式参数 > 环境变量 > 报错）
+    let projectPath: string;
+    if (args.project_root_path) {
+      projectPath = args.project_root_path;
+    } else if (config.defaultProject) {
+      projectPath = config.defaultProject;
+    } else {
+      return 'Error: 未指定项目路径。请通过以下方式之一指定：\n' +
+             '1. 调用时传递 project_root_path 参数\n' +
+             '2. 设置环境变量 MCP_ACE_DEFAULT_PROJECT';
+    }
+
+    // console.log(`执行搜索上下文工具: project=${projectPath}, query=${args.query}`);
 
     // 创建索引管理器实例
     const manager = new IndexManager(config);
 
     // 执行搜索（自动包含增量索引）
-    const result = await manager.searchContext(args.project_root_path, args.query);
+    const result = await manager.searchContext(projectPath, args.query);
 
     return result;
   } catch (error) {
@@ -57,13 +65,13 @@ export const searchContextSchema = {
     properties: {
       project_root_path: {
         type: 'string',
-        description: '项目根目录的绝对路径（使用正斜杠，例如: C:/workspace/myproject）',
+        description: '项目根目录的绝对路径（可选，未指定则使用环境变量 MCP_ACE_DEFAULT_PROJECT）',
       },
       query: {
         type: 'string',
         description: '搜索查询（自然语言描述您要查找的内容）',
       },
     },
-    required: ['project_root_path', 'query'],
+    required: ['query'],
   },
 };

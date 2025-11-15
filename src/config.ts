@@ -125,6 +125,10 @@ function loadConfigFromEnv(): Partial<Config> {
     config.maxLinesPerBlob = parseInt(process.env.MCP_ACE_MAX_LINES_PER_BLOB, 10);
   }
 
+  if (process.env.MCP_ACE_DEFAULT_PROJECT) {
+    config.defaultProject = process.env.MCP_ACE_DEFAULT_PROJECT;
+  }
+
   return config;
 }
 

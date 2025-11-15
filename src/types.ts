@@ -21,6 +21,8 @@ export interface Config {
   excludePatterns: string[];
   /** 存储路径 */
   storagePath: string;
+  /** 默认项目路径 */
+  defaultProject?: string;
 }
 
 /**
